@@ -8,11 +8,10 @@ const App = () => {
   const [input, setInput] = useState('');
   const [code, setCode] = useState('');
 
-  // Initialization of esbuild
   const startService = async () => {
     ref.current = await esbuild.startService({
       worker: true,
-      wasmURL: '/esbuild.wasm'
+      wasmURL: '/esbuild.wasm',
     });
   };
   useEffect(() => {
@@ -28,25 +27,24 @@ const App = () => {
       entryPoints: ['index.js'],
       bundle: true,
       write: false,
-      plugins: [unpkgPathPlugin()],
+      plugins: [unpkgPathPlugin(input)],
       define: {
         'process.env.NODE_ENV': '"production"',
-        global: 'window'
-      }
+        global: 'window',
+      },
     });
 
-    //console.log(result);
+    // console.log(result);
 
     setCode(result.outputFiles[0].text);
-    console.log(code);
-  }
+  };
 
   return (
     <div>
-      <textarea 
-        value={input} 
-        onChange={e => setInput(e.target.value)}>
-      </textarea>
+      <textarea
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+      ></textarea>
       <div>
         <button onClick={onClick}>Submit</button>
       </div>
